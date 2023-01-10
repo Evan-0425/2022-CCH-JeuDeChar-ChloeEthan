@@ -8,16 +8,14 @@ import deplacement
 
 # Brickpi
 BP = brickpi3.BrickPi3()
+
+# Déclaration des variables de capteurs de la brique
 BP.set_sensor_type(BP.PORT_3, BP.SENSOR_TYPE.TOUCH)
 
 # Fonction principale lancée sur un thread
-def main(counter, delay):
+def main():
    deplacement.deplacement()
-   print("je suis dans l'affichage de temps")
-   while counter:
-      time.sleep(delay)
-      print ("%s: %s" + time.ctime(time.time()))
-      counter -= 1
+   print("j'ai fini")
 
 # Stop le programme après clique sur le bouton
 def arretBouton():
@@ -34,12 +32,9 @@ def arretBouton():
          processPrincipal.terminate()
          sys.exit()
 
-
 # Lancement des deux threads
-processPrincipal = multiprocessing.Process(target=main, args=("Thread 1", 1000, 0.1))
+processPrincipal = multiprocessing.Process(target=main)
 processPrincipal.start()
 
-processBouton = multiprocessing.Process(target=arretBouton())
+processBouton = multiprocessing.Process(target=arretBouton)
 processBouton.start()
-
-
