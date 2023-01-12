@@ -3,19 +3,14 @@ import multiprocessing
 import sys
 import time
 import brickpi3
-
-import deplacement
+import os
+from threading import Thread
 
 # Brickpi
 BP = brickpi3.BrickPi3()
 
 # Déclaration des variables de capteurs de la brique
 BP.set_sensor_type(BP.PORT_3, BP.SENSOR_TYPE.TOUCH)
-
-# Fonction principale lancée sur un thread
-def main():
-   deplacement.deplacement()
-   print("j'ai fini")
 
 # Stop le programme après clique sur le bouton
 def arretBouton():
@@ -29,12 +24,13 @@ def arretBouton():
          print("erreur de prise de mesure")
 
       if etatBouton == 1:
-         processPrincipal.terminate()
-         sys.exit()
+         os._exit(1)
 
-# Lancement des deux threads
-processPrincipal = multiprocessing.Process(target=main)
-processPrincipal.start()
 
-processBouton = multiprocessing.Process(target=arretBouton)
+# Lancement du thread pour le bouton
+processBouton = Thread(target=arretBouton)
 processBouton.start()
+
+while True:
+   time.sleep(0.1)
+   print("Je suis dans la boucle")
