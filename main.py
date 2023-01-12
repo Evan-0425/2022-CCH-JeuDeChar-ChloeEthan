@@ -26,11 +26,11 @@ def arretBouton():
       if etatBouton == 1:
          os._exit(1)
 
-
 # Lancement du thread pour le bouton
 processBouton = Thread(target=arretBouton)
 processBouton.start()
 
+# Main
 while True:
    time.sleep(0.1)
    print("Je suis dans la boucle")
