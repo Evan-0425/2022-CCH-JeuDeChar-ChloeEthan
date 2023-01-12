@@ -48,17 +48,17 @@ try:
         if value:  # if the touch sensor is pressed
             if speed <= -100 or speed >= 100:  # if speed reached 100, start ramping down. If speed reached -100, start ramping up.
                 adder = -adder
-            speed += adder
+            speed -= adder
         else:  # else the touch sensor is not pressed or not configured, so set the speed to 0
             speed = 0
             adder = 1
 
         # Set the motor speed for all four motors
-        BP.set_motor_power(BP.PORT_B, speed)
+        BP.set_motor_power(BP.PORT_C, speed)
 
         try:
             # Each of the following BP.get_motor_encoder functions returns the encoder value (what we want to display).
-            print("Encoder B: %6d  " % BP.get_motor_encoder(BP.PORT_B))
+            print("Encoder B: %6d  " % BP.get_motor_encoder(BP.PORT_C))
         except IOError as error:
             print(error)
 
