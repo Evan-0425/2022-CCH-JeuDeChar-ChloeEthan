@@ -5,6 +5,7 @@ import time
 import brickpi3
 import os
 from threading import Thread
+import deplacement
 
 # Brickpi
 BP = brickpi3.BrickPi3()
@@ -18,10 +19,15 @@ BP.set_motor_limits(BP.PORT_B, 80, 80)
 BP.set_motor_limits(BP.PORT_C, 80, 450)
 BP.set_motor_limits(BP.PORT_D, 300, 300)
 
+#Mise à 0 des moteurs
 BP.offset_motor_encoder(BP.PORT_D, BP.get_motor_encoder(BP.PORT_D))
 BP.offset_motor_encoder(BP.PORT_B, BP.get_motor_encoder(BP.PORT_B))
 BP.offset_motor_encoder(BP.PORT_C, BP.get_motor_encoder(BP.PORT_C))
 BP.offset_motor_encoder(BP.PORT_A, BP.get_motor_encoder(BP.PORT_A))
+
+#Fonction principale
+def main():
+    BP.set_motor_position(BP.PORT_A, 2500)
 
 
 # Stop le programme après clique sur le bouton
@@ -52,5 +58,5 @@ processBouton = Thread(target=arretBouton)
 processBouton.start()
 
 # Main
-print("je lance")
-BP.set_motor_position(BP.PORT_D, 2000)  # Plateforme
+if __name__ == '__main__':
+    main()
