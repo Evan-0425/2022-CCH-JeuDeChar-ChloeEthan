@@ -27,7 +27,6 @@ SIX = -550
 SEPT = -700
 
 
-
 try:
     try:
         BP.set_motor_position(BP.PORT_A, 0)
