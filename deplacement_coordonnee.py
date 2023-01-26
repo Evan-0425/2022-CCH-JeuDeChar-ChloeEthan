@@ -24,17 +24,17 @@ TROIS   = -280  #Degrés
 QUATRE  = -375  #Degrés
 CINQ    = -465  #Degrés
 SIX     = -550  #Degrés
-SEPT    = -700  #Degrés
+SEPT    = -730  #Degrés
 
 #              Coordonnées des points du jeu                                  PORT_D                                 PORT_B
 #
-#            G1-------------D1-------------A1  X                X  à  A   ->  1020°                 1  à  1   ->        0°
-#            |              |               |                      à  B   ->  1650°                    à  2   ->     -135°
+#            G1-------------D1-------------A1  X                X  à  A   ->  1020°                 1  à  1   ->      -20°
+#            |              |               |                      à  B   ->  1650°                    à  2   ->     -165°
 #            |    F2--------D2--------B2    |                      à  C   ->  2200°                    à  3   ->     -280°
 #            |    |         |         |     |                      à  D   ->  2645°                    à  4   ->     -375°
 #            |    |    E3---D3---C3   |     |                      à  E   ->  3050°                    à  5   ->     -465°
 #            |    |    |          |   |     |                      à  F   ->  3620°                    à  6   ->     -550°
-#            G4---F4---E4        C4---B4---A4                      à  G   ->  4210°                    à  7   ->     -700°
+#            G4---F4---E4        C4---B4---A4                      à  G   ->  4250°                    à  7   ->     -730°
 #            |    |    |          |   |     |
 #            |    |    E5---D5---C5   |     |
 #            |    |         |         |     |
@@ -53,49 +53,61 @@ def resetPlier():
     upPlier()
 
 def openPlier():
-    BP.set_motor_position(BP.PORT_A, 300)
+    BP.set_motor_position(BP.PORT_A, 350)
     time.sleep(0.3)
 def downPlier():
     BP.set_motor_position(BP.PORT_C, 1850)
+
+def closePlierPion():
+    BP.set_motor_position(BP.PORT_A, 130)
 def closePlier():
 
     nouveauDegreMoteur = BP.get_motor_encoder(BP.PORT_A)
     degreMoteur = 1631731787
-    BP.set_motor_position(BP.PORT_A, -1000)
+    BP.set_motor_power(BP.PORT_A, -50)
     time.sleep(0.1)
 
     while nouveauDegreMoteur != degreMoteur:
 
         degreMoteur = nouveauDegreMoteur
-        time.sleep(0.15)
+        time.sleep(0.2)
         nouveauDegreMoteur = BP.get_motor_encoder(BP.PORT_A)
-        print(BP.get_motor_encoder(BP.PORT_A), "\t", str(degreMoteur), "\t", str(nouveauDegreMoteur))
+        print("Ancien degré : ", str(degreMoteur), "°\t Nouveau degré : ", str(nouveauDegreMoteur), "°")
 
-    BP.set_motor_position(BP.PORT_A, nouveauDegreMoteur + 200)
-    time.sleep(0.3)
-    print(BP.get_motor_encoder(BP.PORT_A))
+    time.sleep(1.0)
+    BP.set_motor_power(BP.PORT_A, 0)
+    nouveauDegreMoteur += 150
+    print("\nDegré objectif : ", str(nouveauDegreMoteur) ,"°")
+    BP.set_motor_position(BP.PORT_A, nouveauDegreMoteur)
+    time.sleep(2.0)
+    print("Degré actuel : ", BP.get_motor_encoder(BP.PORT_A), "°\n")
 
 def upPlier():
 
     nouveauDegreMoteur = BP.get_motor_encoder(BP.PORT_C)
     degreMoteur = 823432432
-    BP.set_motor_position(BP.PORT_C, -2000)
+    BP.set_motor_power(BP.PORT_C, -50)
+    time.sleep(0.1)
 
     while nouveauDegreMoteur != degreMoteur:
 
         degreMoteur = nouveauDegreMoteur
-        time.sleep(0.1)
+        time.sleep(0.2)
         nouveauDegreMoteur = BP.get_motor_encoder(BP.PORT_C)
-        print(BP.get_motor_encoder(BP.PORT_C), "\t", str(degreMoteur), "\t", str(nouveauDegreMoteur))
+        print("Ancien degré : ", str(degreMoteur), "°\t Nouveau degré : ", str(nouveauDegreMoteur), "°")
 
-    BP.set_motor_position(BP.PORT_C, nouveauDegreMoteur + 50)
-    time.sleep(0.3)
-    print(BP.get_motor_encoder(BP.PORT_C))
+    time.sleep(1.0)
+    BP.set_motor_power(BP.PORT_C, 0)
+    nouveauDegreMoteur += 60
+    print("\nDegré objectif : ", str(nouveauDegreMoteur), "°")
+    BP.set_motor_position(BP.PORT_C, nouveauDegreMoteur)
+    time.sleep(2.0)
+    print("Degré actuel : ", BP.get_motor_encoder(BP.PORT_C), "°\n")
 
 def recupPion():
     downPlier()
     time.sleep(10.0)
-    closePlier()
+    closePlierPion()
     time.sleep(4.0)
     upPlier()
     time.sleep(3.0)
@@ -105,23 +117,30 @@ try:
 
         BP.offset_motor_encoder(BP.PORT_A, BP.get_motor_encoder(BP.PORT_A))
         BP.set_motor_limits(BP.PORT_A, 300, 200)
+        BP.offset_motor_encoder(BP.PORT_C, BP.get_motor_encoder(BP.PORT_C))
+        BP.set_motor_limits(BP.PORT_C, 80, 250)
+        resetPlier()
+        time.sleep(4.0)
+
+        BP.reset_motor_encoder(BP.PORT_A)
+        BP.reset_motor_encoder(BP.PORT_C)
+        BP.offset_motor_encoder(BP.PORT_A, BP.get_motor_encoder(BP.PORT_A))
+        BP.set_motor_limits(BP.PORT_A, 300, 200)
         BP.offset_motor_encoder(BP.PORT_B, BP.get_motor_encoder(BP.PORT_B))
         BP.set_motor_limits(BP.PORT_B, 80, 80)
         BP.offset_motor_encoder(BP.PORT_C, BP.get_motor_encoder(BP.PORT_C))
         BP.set_motor_limits(BP.PORT_C, 80, 250)
         BP.offset_motor_encoder(BP.PORT_D, BP.get_motor_encoder(BP.PORT_D))
         BP.set_motor_limits(BP.PORT_D, 80, 300)
-        resetPlier()
-        time.sleep(4.0)
-        BP.offset_motor_encoder(BP.PORT_A, BP.get_motor_encoder(BP.PORT_A))
-        BP.offset_motor_encoder(BP.PORT_C, BP.get_motor_encoder(BP.PORT_C))
+
+
 
 
     except IOError as error:
         print(error)
 
     openPlier()
-    deplacementCoordonne(E, QUATRE)
+    deplacementCoordonne(A, SEPT)
     time.sleep(15.0)
 
     recupPion()
@@ -131,4 +150,4 @@ try:
 except KeyboardInterrupt:  # except the program gets interrupted by Ctrl+C on the keyboard.
     BP.reset_all()  # Unconfigure the sensors, disable the motors, and restore the LED to the control of the BrickPi3 firmware.
 
-print("A ton tour  !")
+print("A ton tour !")
