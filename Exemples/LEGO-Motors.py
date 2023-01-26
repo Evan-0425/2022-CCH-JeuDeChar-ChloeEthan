@@ -54,11 +54,11 @@ try:
             adder = 1
 
         # Set the motor speed for all four motors
-        BP.set_motor_power(BP.PORT_C, speed)
+        BP.set_motor_power(BP.PORT_A, speed)
 
         try:
             # Each of the following BP.get_motor_encoder functions returns the encoder value (what we want to display).
-            print("Encoder B: %6d  " % BP.get_motor_encoder(BP.PORT_C))
+            print("Encoder B: %6d  " % BP.get_motor_encoder(BP.PORT_A))
         except IOError as error:
             print(error)
 
